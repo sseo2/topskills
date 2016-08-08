@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script type="text/javascript">
+    function myCreateFunction() {
+      
+      var sizeQueries = parseInt(document.getElementById("sizeQueries").value) + 1
+      document.getElementById("sizeQueries").value = sizeQueries;
+
+      var table = document.getElementById("myTable");
+      var row = table.insertRow(0);
+      var cell1 = row.insertCell(0);
+      var cell2 = row.insertCell(1);
+      cell1.innerHTML = "<input type='text' class='form-control' name='jobtitle"+ sizeQueries +"' placeholder='Job Title'>";
+      cell2.innerHTML = "<input type='text' class='form-control' name='company"+ sizeQueries +"' placeholder='Company'>";
+    }
+
+    function myDeleteFunction() {
+      var sizeQueries = document.getElementById("sizeQueries").value;
+
+      if (parseInt(sizeQueries) > 1) {
+        document.getElementById("sizeQueries").value = parseInt(sizeQueries) - 1;
+        document.getElementById("myTable").deleteRow(0);
+      }
+    }
+
+  </script>
+  <title>Topskills</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</head>
+<body align = "center" vertial-align = "middle">
+<a href='./dictionary'>Dictionary</a>
+<button onclick="myCreateFunction();" class="btn btn-primary">+</button>
+<button onclick="myDeleteFunction();" class="btn btn-primary">-</button>
+<form action="./results/" method="POST" class="navbar-form navbar" role="search">
+    <input type="hidden" name="sizeQueries" id="sizeQueries" value = 1>
+    {% csrf_token %}
+    <table id="myTable" class="form-group">
+      <tr>
+        <td><input type="text" class="form-control" name="jobtitle1" placeholder="Job Title"></td>
+        <td><input type="text" class="form-control" name="company1" placeholder="Company"></td>
+      </tr>
+      <tr>
+        <td colspan="2"><button type="submit" class="btn btn-primary">Search</button></td>
+      </tr>
+    </table>
+</form>
+    <!--<div class="form-group" vertial-align = "middle"> 
+        <input type="text" class="form-control" name="jobtitle" placeholder="Job Title">
+        <input type="text" class="form-control" name="company" placeholder="Company">
+        <button type="submit" class="btn btn-primary">Search</button>
+        <a href='./dictionary'>Dictionary</a>
+    </div>-->
+
+
+</body>
+</html>
