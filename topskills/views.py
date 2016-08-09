@@ -80,7 +80,7 @@ def urlToText(url):
 			return ""
 	except Exception:
 		return ""
-
+ 	
 def topEmployersJobDescriptions(company, jobtitle):
 	df = pd.DataFrame(columns=['company','jobtitle','url','description'])
 	texts=[]

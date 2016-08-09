@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
   <script type="text/javascript">
     function myCreateFunction() {
       
@@ -11,8 +12,8 @@
       var row = table.insertRow(0);
       var cell1 = row.insertCell(0);
       var cell2 = row.insertCell(1);
-      cell1.innerHTML = "<input type='text' class='form-control' name='jobtitle"+ sizeQueries +"' placeholder='Job Title'>";
-      cell2.innerHTML = "<input type='text' class='form-control' name='company"+ sizeQueries +"' placeholder='Company'>";
+      cell1.innerHTML = "<input type='text' size='27' class='form-control' name='jobtitle"+ sizeQueries +"' placeholder='Job Title'>";
+      cell2.innerHTML = "<input type='text' size='27' class='form-control' name='company"+ sizeQueries +"' placeholder='Company'>";
     }
 
     function myDeleteFunction() {
@@ -23,39 +24,52 @@
         document.getElementById("myTable").deleteRow(0);
       }
     }
-
   </script>
   <title>Topskills</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <style>
+    td{
+      padding:1px;
+    }
+  </style>
+ 
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
-<body align = "center" vertial-align = "middle">
-<a href='./dictionary'>Dictionary</a>
-<button onclick="myCreateFunction();" class="btn btn-primary">+</button>
-<button onclick="myDeleteFunction();" class="btn btn-primary">-</button>
-<form action="./results/" method="POST" class="navbar-form navbar" role="search">
-    <input type="hidden" name="sizeQueries" id="sizeQueries" value = 1>
-    {% csrf_token %}
-    <table id="myTable" class="form-group">
-      <tr>
-        <td><input type="text" class="form-control" name="jobtitle1" placeholder="Job Title"></td>
-        <td><input type="text" class="form-control" name="company1" placeholder="Company"></td>
-      </tr>
-      <tr>
-        <td colspan="2"><button type="submit" class="btn btn-primary">Search</button></td>
-      </tr>
-    </table>
-</form>
-    <!--<div class="form-group" vertial-align = "middle"> 
-        <input type="text" class="form-control" name="jobtitle" placeholder="Job Title">
-        <input type="text" class="form-control" name="company" placeholder="Company">
-        <button type="submit" class="btn btn-primary">Search</button>
-        <a href='./dictionary'>Dictionary</a>
-    </div>-->
 
+<body vertial-align = "middle">
+</br>
+<div align="center">
+  <table width="500" class="form-group">
+    <tr>
+      <td align="right">
+        <a href='./dictionary'><button class="btn btn-primary">Dictionary</button></a>
+        <button onclick="myCreateFunction();" class="btn btn-primary">+</button>
+        <button onclick="myDeleteFunction();" class="btn btn-primary">-</button>
+      </td>
+    </tr>
+    <tr>
+  </table>
+</div>
+
+<div align="center">
+  <form action="./results/" method="POST" class="navbar-form navbar" role="search">
+    <table width="500" id="myTable" class="form-group">
+      {% csrf_token %}
+        <input type="hidden" name="sizeQueries" id="sizeQueries" value = 1>
+        <tr>
+          <td><input type="text" size="27" class="form-control" name="jobtitle1" placeholder="Job Title"></td>
+          <td><input type="text" size="27" class="form-control" name="company1" placeholder="Company"></td>
+        </tr>
+        <tr align="center">
+          <td colspan="2" height="50"><button type="submit" class="btn btn-primary">Search</button></td>
+        </tr>
+      </table>
+  </form>
+</div>
 
 </body>
 </html>

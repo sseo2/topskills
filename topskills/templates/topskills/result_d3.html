@@ -9,28 +9,48 @@
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
 <body>
+
 <div class="container">
-<h1>Top 20 Technical Skills</h1>
-<br>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <td><B>Technical Skills</B></td>
-            <td><B>Count</B></td>
-        </tr>
-        </thead>
-        <tbody>
-        {% for tech, count in top20 %}
-        <tr>
-            <td> {{tech}}</td>
-            <td> {{count}} </td>
-        </tr>   
-        {% endfor %}
-        </tbody>
-    </table>
 </div>
 
 <script src="http://d3js.org/d3.v3.min.js"></script>  
+<script src="http://cdn.rawgit.com/jasondavies/d3-cloud/master/build/d3.layout.cloud.js"></script>
+<script>
+var dataset = JSON.parse('{{ result|safe }}')
+
+var color = d3.scale.linear()
+.domain([0,1,2,3,4,5,6,10,15,20,100])
+.range(["#222", "#333", "#444", "#555", "#666", "#777", "#888", "#999", "#aaa", "#bbb", "#ccc", "#ddd"]);
+
+d3.layout.cloud().size([1200, 800])
+        .words(dataset)
+        .rotate(0)
+        .fontSize(function(d) { return 5*d.value; })
+        .on("end", draw)
+        .start();
+
+function draw(words) {
+  d3.select("body div").append("svg")
+          .attr("width", 1200)
+          .attr("height", 800)
+          .attr("class", "wordcloud")
+          .append("g")
+          // without the transform, words words would get cutoff to the left and top, they would
+          // appear outside of the SVG area
+          .attr("transform", "translate(500, 400)")
+          .selectAll("text")
+          .data(words)
+          .enter().append("text")
+          .style("font-size", function(d) { return 5*d.value + "px"; })
+          .style("fill", function(d, i) { return color(i); })
+          .attr("transform", function(d) {
+              return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+          })
+          .text(function(d) { return d.name; });
+}
+</script>
+
+
 <style type="text/css">
       div.bar {
         display: inline-block;
@@ -41,8 +61,27 @@
       }
 </style>
 
-<script>
+<div class="container">
+  <h1>Top 20 Technical Skills</h1>
+  <table class="table table-striped">
+      <thead>
+      <tr>
+          <td><B>Technical Skills</B></td>
+          <td><B>Count</B></td>
+      </tr>
+      </thead>
+      <tbody>
+      {% for tech, count in top20 %}
+      <tr>
+          <td> {{tech}}</td>
+          <td> {{count}} </td>
+      </tr>   
+      {% endfor %}
+      </tbody>
+  </table>
+</div>
 
+<script>
 var dataset = JSON.parse('{{ result|safe }}')
 
 var w = 1000;
@@ -68,7 +107,7 @@ svg.selectAll("rect")
       return d.value * 20;
     })
    .attr("height", 20)
-   .attr("fill", "#337ab7");
+   .attr("fill", "#bbb");
 
 svg.selectAll("text")
    .data(dataset)
@@ -83,7 +122,6 @@ svg.selectAll("text")
    .attr("y", function(d, i) {
         return i * 25 + 12;
    });
-   
 </script>
 
 </body>
