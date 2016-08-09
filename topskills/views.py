@@ -97,7 +97,7 @@ def topEmployersJobDescriptions(company, jobtitle):
 					df.loc[i] = [item['company'], item['jobtitle'], item['url'], urlToText(item['url'])]
 					i+=1
 	except Exception:
-		print "Error"
+		print("Error")
 	return texts
 
 def getWordsfromText(documents):
@@ -137,4 +137,4 @@ def getHardSkills(filtered_words):
 
 	# TF
 	technical_tf = nltk.FreqDist(result)
-	return technical_tf.most_common(20)
+	return technical_tf.most_common(30)
