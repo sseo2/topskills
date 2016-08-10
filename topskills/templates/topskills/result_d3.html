@@ -4,44 +4,43 @@
   <title>Topskills</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js"></script>  
+  <script src="http://cdn.rawgit.com/jasondavies/d3-cloud/master/build/d3.layout.cloud.js"></script>
 </head>
 <body>
 
-<div class="container">
-</div>
+<div id="cloud" align="center"></div>
 
-<script src="http://d3js.org/d3.v3.min.js"></script>  
-<script src="http://cdn.rawgit.com/jasondavies/d3-cloud/master/build/d3.layout.cloud.js"></script>
+<div id="barChart" align="center"></div>
+
 <script>
-var dataset = JSON.parse('{{ result|safe }}')
+var dataset = JSON.parse('{{ result|safe }}');
+var magic = 120/dataset[0].value;
 
 var color = d3.scale.linear()
 .domain([0,1,2,3,4,5,6,10,15,20,100])
 .range(["#222", "#333", "#444", "#555", "#666", "#777", "#888", "#999", "#aaa", "#bbb", "#ccc", "#ddd"]);
 
-d3.layout.cloud().size([1200, 800])
+d3.layout.cloud().size([1000, 550])
         .words(dataset)
         .rotate(0)
-        .fontSize(function(d) { return 5*d.value; })
+        .fontSize(function(d) { return magic*d.value; })
         .on("end", draw)
         .start();
 
 function draw(words) {
-  d3.select("body div").append("svg")
-          .attr("width", 1200)
-          .attr("height", 800)
+  d3.select("#cloud").append("svg")
+          .attr("width", 1000)
+          .attr("height", 550)
           .attr("class", "wordcloud")
           .append("g")
-          // without the transform, words words would get cutoff to the left and top, they would
-          // appear outside of the SVG area
-          .attr("transform", "translate(500, 400)")
+          .attr("transform", "translate(390, 270)")
           .selectAll("text")
           .data(words)
           .enter().append("text")
-          .style("font-size", function(d) { return 5*d.value + "px"; })
+          .style("font-size", function(d) { return magic*d.value + "px"; })
           .style("fill", function(d, i) { return color(i); })
           .attr("transform", function(d) {
               return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
@@ -50,23 +49,55 @@ function draw(words) {
 }
 </script>
 
+<script>
 
-<style type="text/css">
-      div.bar {
-        display: inline-block;
-        width: 20px;
-        height: 75px; /* Gets overriden by D3-assigned height below */
-        margin-right: 2px;
-        background-color: teal;
-      }
-</style>
+var w = 700;
+var h = 650;
+var barPadding = 1;
+var magic2 = 550/dataset[0].value;
 
-<div class="container">
+//Create SVG element
+var svg = d3.select("#barChart")
+      .append("svg")
+      .attr("width", w)
+      .attr("height", h)
+      .attr("class", "container");
+
+svg.selectAll("rect")
+   .data(dataset)
+   .enter()
+   .append("rect")
+   .attr("x", 0)
+   .attr("y", function(d, i) {
+      return i * 35;
+    })
+   .attr("width", function(d) {
+      return d.value * magic2;
+    })
+   .attr("height", 30)
+   .attr("fill", "#bbb");
+
+svg.selectAll("text")
+   .data(dataset)
+   .enter()
+   .append("text")
+   .text(function(d) {
+        return d.name + "( " + d.value + " )";
+   })
+   .attr("x", function(d) {
+        return d.value * magic2 + 5;
+   })
+   .attr("y", function(d, i) {
+        return i * 35 + 15;
+   });
+</script>
+
+<!--<div>
   <h1>Top 20 Technical Skills</h1>
-  <table class="table table-striped">
+  <table>
       <thead>
       <tr>
-          <td><B>Technical Skills</B></td>
+          <td><B>Name/B></td>
           <td><B>Count</B></td>
       </tr>
       </thead>
@@ -79,49 +110,6 @@ function draw(words) {
       {% endfor %}
       </tbody>
   </table>
-</div>
-
-<script>
-var dataset = JSON.parse('{{ result|safe }}')
-
-var w = 1000;
-var h = 700;
-var barPadding = 1;
-
-//Create SVG element
-var svg = d3.select("body div")
-      .append("svg")
-      .attr("width", w)
-      .attr("height", h)
-      .attr("class", "container");
-
-svg.selectAll("rect")
-   .data(dataset)
-   .enter()
-   .append("rect")
-   .attr("x", 0)
-   .attr("y", function(d, i) {
-      return i * 25;
-    })
-   .attr("width", function(d) {
-      return d.value * 20;
-    })
-   .attr("height", 20)
-   .attr("fill", "#bbb");
-
-svg.selectAll("text")
-   .data(dataset)
-   .enter()
-   .append("text")
-   .text(function(d) {
-        return d.name;
-   })
-   .attr("x", function(d) {
-        return d.value * 20 + 5;
-   })
-   .attr("y", function(d, i) {
-        return i * 25 + 12;
-   });
-</script>
+</div>-->
 
 </body>
